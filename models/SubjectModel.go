@@ -1,4 +1,4 @@
-package models
+package bong
 
 type Subject struct {
 	SubjectID string `json:"subjectID,omitempty" bson:"subjectID,omitempty"`

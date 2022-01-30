@@ -1,4 +1,4 @@
-package models
+package bong
 
 // the password and the subjectList can be empty
 type Student struct {

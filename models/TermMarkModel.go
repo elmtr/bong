@@ -1,4 +1,4 @@
-package models
+package bong
 
 type TermMark struct {
 	TermMarkID string  `json:"termMarkID,omitempty" bson:"termMarkID,omitempty"`

@@ -1,4 +1,4 @@
-package models
+package bong
 
 type FinalMark struct {
 	FinalMarkID string       `json:"finalMarkID,omitempty" bson:"finalMarkID,omitempty"`

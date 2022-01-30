@@ -1,4 +1,4 @@
-package models
+package bong
 
 type Mark struct {
 	MarkID    string       `json:"markID,omitempty" bson:"markID,omitempty"`

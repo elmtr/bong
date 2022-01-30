@@ -1,4 +1,4 @@
-package models
+package bong
 
 type Period struct {
 	PeriodID string `json:"periodID,omitempty" bson:"periodID,omitempty"`

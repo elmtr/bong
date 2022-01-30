@@ -1,4 +1,4 @@
-package models
+package bong
 
 type Parent struct {
 	ParentID      string   `json:"parentID,omitempty" bson:"parentID,omitempty"`

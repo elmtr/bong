@@ -1,4 +1,4 @@
-package models
+package bong
 
 type Truancy struct {
 	TruancyID string       `json:"truancyID,omitempty" bson:"truancyID,omitempty"`

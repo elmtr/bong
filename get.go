@@ -4,16 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/stevensun369/bong/models"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetMarks(subjectID string, studentID string) ([]models.Mark, error) {
+func GetMarks(subjectID string, studentID string) ([]Mark, error) {
 	marksID := fmt.Sprintf("marks:%v:%v", subjectID, studentID)
 
-  var marks []models.Mark
+  var marks []Mark
 
 	marksJSON, err := Get(marksID)
   if err != nil {
