@@ -50,15 +50,12 @@ var LastNameSort interface{} = bson.D{
 }
 
 var ctx = context.Background()
-
-var Client *mongo.Client
 var RDB *redis.Client
 
 // initializing database
 func InitDatabase(MongoURI string, RedisOptions *redis.Options) {
-  var err error
   // client
-  Client, err = mongo.Connect(context.Background(), options.Client().ApplyURI(MongoURI))
+  client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(MongoURI))
   if err != nil {
     log.Fatal(err)
   }
@@ -67,22 +64,22 @@ func InitDatabase(MongoURI string, RedisOptions *redis.Options) {
   RDB = redis.NewClient(RedisOptions)
 
   // setting up collections
-  AverageMarks = getCollection("averagemarks")
-  FinalMarks = getCollection("finalmarks")
-  Grades = getCollection("grades")
-  Marks = getCollection("marks")
-  Parents = getCollection("parents")
-  Periods = getCollection("periods")
-  Schools = getCollection("schools")
-  Students = getCollection("students")
-  Subjects = getCollection("subjects")
-  Teachers = getCollection("teachers")
-  TermMarks = getCollection("termmarks")
-  Truancies = getCollection("truancies")
+  AverageMarks = getCollection("averagemarks", client)
+  FinalMarks = getCollection("finalmarks", client)
+  Grades = getCollection("grades", client)
+  Marks = getCollection("marks", client)
+  Parents = getCollection("parents", client)
+  Periods = getCollection("periods", client)
+  Schools = getCollection("schools", client)
+  Students = getCollection("students", client)
+  Subjects = getCollection("subjects", client)
+  Teachers = getCollection("teachers", client)
+  TermMarks = getCollection("termmarks", client)
+  Truancies = getCollection("truancies", client)
 }
 
-func getCollection(collectionName string) (*mongo.Collection) {
-  return Client.Database("elmtree").Collection(collectionName)
+func getCollection(collectionName string, client *mongo.Client) (*mongo.Collection) {
+  return client.Database("elmtree").Collection(collectionName)
 }
 
 func Set(key string, value string) error {
