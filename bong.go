@@ -14,9 +14,6 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-// main client
-var Client *mongo.Client
-
 // collections
 var AverageMarks *mongo.Collection
 var FinalMarks *mongo.Collection
@@ -84,7 +81,7 @@ func InitDatabase(MongoURI string, RedisOptions *redis.Options) {
 }
 
 func getCollection(collectionName string, client *mongo.Client) (*mongo.Collection) {
-  return Client.Database("elmtree").Collection(collectionName)
+  return client.Database("elmtree").Collection(collectionName)
 }
 
 func Set(key string, value string) error {
