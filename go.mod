@@ -1,4 +1,4 @@
-module bong
+module github.com/stevensun369/bong
 
 go 1.15
 

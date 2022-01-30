@@ -1,9 +1,10 @@
 package bong
 
 import (
-	"bong/models"
 	"encoding/json"
 	"fmt"
+
+	"github.com/stevensun369/bong/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
