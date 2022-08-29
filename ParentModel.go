@@ -12,8 +12,9 @@ type Parent struct {
   FirstName string `json:"firstName" bson:"firstName"`
   LastName string `json:"lastName" bson:"lastName"`
   Phone string `json:"phone" bson:"phone"`
-  Password string `json:"password" bson:"password"`
   Students []ParentStudent `json:"students" bson:"students"`
+  Password string `json:"password" bson:"password"`
+  Passcode string `json:"passcode" bson:"passcode"`
 }
 
 type ParentStudent struct {
@@ -37,6 +38,9 @@ func GenParentToken(parent Parent) (string, error) {
 
   claims := &ParentClaims {
     ID: parent.ID,
+    FirstName: parent.FirstName,
+    LastName: parent.LastName,
+    Phone: parent.Phone,
     Students: parent.Students,
     StandardClaims: jwt.StandardClaims {
       ExpiresAt: expirationTime.Unix(),
@@ -75,7 +79,7 @@ func (parent *Parent) Insert() (error) {
   return err
 }
 
-func UpdateParent(id string, update interface {}) (error) {
+func UpdateParent(id interface {}, update interface {}) (error) {
   _, err := Parents.UpdateOne(
     ctx,
     bson.M{"id": id},

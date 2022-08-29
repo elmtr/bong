@@ -16,6 +16,7 @@ type Student struct {
   Grade Grade `json:"grade"`
   Subjects []Subject `json:"subjects"`
   Password string `json:"password" bson:"password"`
+  Passcode string `json:"passcode" bson:"passcode"`
 }
 
 type StudentClaims struct {
@@ -104,7 +105,7 @@ func (student *Student) Insert() (error) {
   return err
 }
 
-func UpdateStudent(id string, update interface {}) (error) {
+func UpdateStudent(id interface {}, update interface {}) (error) {
   _, err := Students.UpdateOne(
     ctx,
     bson.M{"id": id},
