@@ -26,6 +26,9 @@ func GetTruancies(filter interface{}, optionsData interface{}) ([]Truancy, error
 	}
 
 	err = cursor.All(ctx, &truancies)
+	if len(truancies) == 0{
+		truancies = []Truancy {}
+	}
 	return truancies, err
 }
 

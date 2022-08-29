@@ -27,5 +27,8 @@ func GetSubjects(filter interface{}, optionsData interface{}) ([]Subject, error)
 		return nil, err
 	}
 	err = cursor.All(ctx, &subjects)
+	if len(subjects) == 0{
+		subjects = []Subject {}
+	}
 	return subjects, err
 }

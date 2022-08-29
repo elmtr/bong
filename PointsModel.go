@@ -9,6 +9,14 @@ type Points struct {
 	StudentID string `json:"studentID" bson:"studentID"`
 }
 
+func GetPoints(filter interface {}) (Points, error) {
+  var points Points
+
+  err := PointsCollection.FindOne(ctx, filter).Decode(&points)
+
+  return points, err
+}
+
 func ModifyPoints(filter interface{}, amount int) (Points, error) {
   var points Points
 
@@ -22,10 +30,10 @@ func ModifyPoints(filter interface{}, amount int) (Points, error) {
   return points, err
 }
 
-func IncreasePoints(filter interface{}, ) (Points, error) {
+func IncreasePoints(filter interface{}) (Points, error) {
   return ModifyPoints(filter, 1)
 }
 
-func DecreasePoints(filter interface{}, ) (Points, error) {
+func DecreasePoints(filter interface{}) (Points, error) {
   return ModifyPoints(filter, -1)
 }

@@ -14,9 +14,14 @@ type Student struct {
   LastName string `json:"lastName" bson:"lastName"`
   Phone string `json:"phone" bson:"phone"`
   Grade Grade `json:"grade"`
-  Subjects []Subject `json:"subjects"`
+  Subjects []ShortSubject `json:"subjects"`
   Password string `json:"password" bson:"password"`
   Passcode string `json:"passcode" bson:"passcode"`
+}
+
+type ShortSubject struct {
+  ID string `json:"id" bson:"id"`
+	Name string `json:"name" bson:"name"`
 }
 
 type StudentClaims struct {
@@ -25,7 +30,7 @@ type StudentClaims struct {
   LastName string `json:"lastName" bson:"lastName"`
   Phone string `json:"phone" bson:"phone"`
   Grade Grade `json:"grade"`
-  Subjects []Subject `json:"subjects"`
+  Subjects []ShortSubject `json:"subjects"`
   
   jwt.StandardClaims
 }
@@ -70,18 +75,18 @@ func GetStudents(filter interface{}) ([]Student, error) {
   return students, err
 }
 
-func UpdateStudentSubjects(filter interface{}, subjects []Subject) (Student, error) {
-  var student Student 
+func AddStudentSubject(id string, subjects []ShortSubject, subject ShortSubject) ([]ShortSubject, error) {
+  subjects = append(subjects, subject)
 
-  err := Students.FindOneAndUpdate(ctx, filter, bson.M{
+  _, err := Students.UpdateOne(ctx, bson.M{
+    "id": id,
+  }, bson.M{
     "$set": bson.M{
       "subjects": subjects,
     },
-  }).Decode(&student)
+  })
 
-  student.Subjects = subjects
-
-  return student, err
+  return subjects, err
 }
 
 func UpdateStudentGrade(filter interface{}, grade Grade) (Student, error) {
@@ -100,6 +105,8 @@ func UpdateStudentGrade(filter interface{}, grade Grade) (Student, error) {
 
 func (student *Student) Insert() (error) {
   student.ID = GenID()
+  student.Grade = Grade {}
+  student.Subjects = []ShortSubject {}
 
   _, err := Students.InsertOne(ctx, student)
   return err

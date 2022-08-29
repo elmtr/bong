@@ -56,18 +56,18 @@ func GetTeacher(filter interface{}) (Teacher, error) {
   return teacher, err
 }
 
-func UpdateTeacherSubjects(filter interface{}, subjects []Subject) (Teacher, error) {
-  var teacher Teacher 
+func AddTeacherSubject(id string, subjects []Subject, subject Subject) ([]Subject, error) {
+  subjects = append(subjects, subject)
 
-  err := Teachers.FindOneAndUpdate(ctx, filter, bson.M{
+  _, err := Teachers.UpdateOne(ctx, bson.M{
+    "id": id,
+  }, bson.M{
     "$set": bson.M{
       "subjects": subjects,
     },
-  }).Decode(&teacher)
+  })
 
-  teacher.Subjects = subjects
-
-  return teacher, err
+  return subjects, err
 }
 
 func UpdateTeacherHomeroom(filter interface{}, homeroom Grade) (Teacher, error) {
@@ -86,6 +86,8 @@ func UpdateTeacherHomeroom(filter interface{}, homeroom Grade) (Teacher, error) 
 
 func (teacher *Teacher) Insert() (error) {
   teacher.ID = GenID()
+  teacher.Homeroom = Grade {}
+  teacher.Subjects = []Subject {}
   
   _, err := Teachers.InsertOne(ctx, teacher)
   return err

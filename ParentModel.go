@@ -74,6 +74,7 @@ func AddParentStudent(id string, students []ParentStudent, student ParentStudent
 
 func (parent *Parent) Insert() (error) {
   parent.ID = GenID()
+  parent.Students = []ParentStudent {}
 
   _, err := Parents.InsertOne(ctx, parent)
   return err

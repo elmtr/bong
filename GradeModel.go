@@ -3,7 +3,7 @@ package bong
 import "go.mongodb.org/mongo-driver/mongo/options"
 
 type Grade struct {
-	GradeID     string `json:"gradeID" bson:"gradeID"`
+	ID     string `json:"id" bson:"id"`
 	SchoolID    string `json:"schoolID" bson:"schoolID"`
 	YearFrom    int    `json:"yearFrom" bson:"yearFrom"`
 	YearTo      int    `json:"yearTo" bson:"yearTo"`
@@ -23,6 +23,9 @@ func GetGrades(filter interface{}, optionsData interface{}) ([]Grade, error) {
 		return nil, err
 	}
 	err = cursor.All(ctx, &grades)
+	if len(grades) == 0{
+		grades = []Grade {}
+	}
 	return grades, err
 }
 

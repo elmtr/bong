@@ -1,6 +1,8 @@
 package bong
 
 import (
+	"context"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -26,6 +28,9 @@ func GetDraftMarks(filter interface{}, optionsData interface{}) ([]DraftMark, er
 	}
 
 	err = cursor.All(ctx, &draftMarks)
+  if len(draftMarks) == 0{
+		draftMarks = []DraftMark {}
+	}
 	return draftMarks, err
 }
 
@@ -36,20 +41,16 @@ func (draftMark *DraftMark) Insert() (interface{}, error) {
 	return res.InsertedID, err
 }
 
-func UpdateDraftMark(filter interface{}, value int, dateDay string, dateMonth string) (DraftMark, error) {
-  var draftMark DraftMark
-
-  err := DraftMarks.FindOneAndUpdate(ctx, filter, bson.M{
-    "$set": bson.M{
-      "value": value,
-      "dateDay": dateDay,
-      "dateMonth": dateMonth,
+func (draftMark DraftMark) Update() (DraftMark, error) {
+  var oldDraftMark DraftMark
+  
+  err := DraftMarks.FindOneAndReplace(
+    context.TODO(),
+    bson.M {
+      "id": draftMark.ID,
     },
-  }).Decode(&draftMark)
-
-  draftMark.Value = value
-  draftMark.DateDay = dateDay
-  draftMark.DateMonth = dateMonth
+    draftMark,
+  ).Decode(&oldDraftMark)
 
   return draftMark, err
 }

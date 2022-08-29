@@ -25,6 +25,9 @@ func GetMarks(filter interface{}, optionsData interface{}) ([]Mark, error) {
 	}
 
 	err = cursor.All(ctx, &marks)
+	if len(marks) == 0{
+		marks = []Mark {}
+	}
 	return marks, err
 }
 
