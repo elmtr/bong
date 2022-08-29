@@ -97,7 +97,7 @@ func UpdateStudentGrade(filter interface{}, grade Grade) (Student, error) {
   return student, err
 }
 
-func (student Student) Insert() (error) {
+func (student *Student) Insert() (error) {
   student.ID = GenID()
 
   _, err := Students.InsertOne(ctx, student)

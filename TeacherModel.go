@@ -84,14 +84,14 @@ func UpdateTeacherHomeroom(filter interface{}, homeroom Grade) (Teacher, error) 
   return teacher, err
 }
 
-func (teacher Teacher) Insert() (error) {
+func (teacher *Teacher) Insert() (error) {
   teacher.ID = GenID()
   
   _, err := Teachers.InsertOne(ctx, teacher)
   return err
 }
 
-func UpdateTeacher(id string, update interface {}) (error) {
+func UpdateTeacher(id interface {}, update interface {}) (error) {
   _, err := Teachers.UpdateOne(
     ctx,
     bson.M{"id": id},
