@@ -52,6 +52,7 @@ var AverageMarks *mongo.Collection
 var Teachers *mongo.Collection
 var Students *mongo.Collection
 var Parents *mongo.Collection
+var Admins *mongo.Collection
 
 var ctx = context.Background()
 var Client *mongo.Client
@@ -82,6 +83,7 @@ func InitDB(MongoURI string) {
   Teachers = GetCollection("teachers", Client)
   Students = GetCollection("students", Client)
   Parents = GetCollection("parents", Client)
+  Admins = GetCollection("admins", Client)
 
   fmt.Println("connected to MongoDB")
 }

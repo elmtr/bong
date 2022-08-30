@@ -70,14 +70,39 @@ func AddTeacherSubject(id string, subjects []Subject, subject Subject) ([]Subjec
   return subjects, err
 }
 
-func UpdateTeacherHomeroom(filter interface{}, homeroom Grade) (Teacher, error) {
+func RemoveTeacherSubject(id string, subjects []Subject, oldSubject Subject) ([]Subject, error) {
+  var newSubjects []Subject 
+  for _, subject := range subjects {
+    if (subject.ID != oldSubject.ID) {
+      newSubjects = append(newSubjects, subject)
+    }
+  }
+
+  _, err := Teachers.UpdateOne(ctx, bson.M{
+    "id": id,
+  }, bson.M{
+    "$set": bson.M{
+      "subjects": newSubjects,
+    },
+  })
+
+  return newSubjects, err
+}
+
+func UpdateTeacherHomeroom(id string, homeroom Grade) (Teacher, error) {
   var teacher Teacher 
 
-  err := Teachers.FindOneAndUpdate(ctx, filter, bson.M{
-    "$set": bson.M{
-      "homeroom": homeroom,
+  err := Teachers.FindOneAndUpdate(
+    ctx, 
+    bson.M{
+      "id": id,
     },
-  }).Decode(&teacher)
+    bson.M{
+      "$set": bson.M{
+        "homeroom": homeroom,
+      },
+    },
+  ).Decode(&teacher)
 
   teacher.Homeroom = homeroom
 

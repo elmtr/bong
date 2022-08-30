@@ -89,18 +89,94 @@ func AddStudentSubject(id string, subjects []ShortSubject, subject ShortSubject)
   return subjects, err
 }
 
-func UpdateStudentGrade(filter interface{}, grade Grade) (Student, error) {
+func RemoveStudentSubject(id string, subjects []ShortSubject, oldSubject ShortSubject) ([]ShortSubject, error) {
+  var newSubjects []ShortSubject 
+  for _, subject := range subjects {
+    if (subject.ID != oldSubject.ID) {
+      newSubjects = append(newSubjects, subject)
+    }
+  }
+
+  _, err := Students.UpdateOne(ctx, bson.M{
+    "id": id,
+  }, bson.M{
+    "$set": bson.M{
+      "subjects": newSubjects,
+    },
+  })
+
+  return newSubjects, err
+}
+
+func UpdateStudentGrade(id string, grade Grade) (Student, error) {
   var student Student 
 
-  err := Students.FindOneAndUpdate(ctx, filter, bson.M{
-    "$set": bson.M{
-      "grade": grade,
+  err := Students.FindOneAndUpdate(
+    ctx, 
+    bson.M{
+      "id": id,
     },
-  }).Decode(&student)
+    bson.M{
+      "$set": bson.M{
+        "grade": grade,
+      },
+    },
+  ).Decode(&student)
 
   student.Grade = grade
 
   return student, err
+}
+
+func StudentSetup(id interface {}, grade Grade) (Student, error) {
+  grade, err := GetGrade(
+    bson.M{
+      "gradeNumber": grade.GradeNumber,
+      "gradeLetter": grade.GradeLetter,
+    },
+  )
+  if err != nil {
+    return Student {}, err
+  }
+  
+  subjects, err := GetSubjects(
+    bson.M{
+      "grade.gradeLetter": grade.GradeLetter,
+      "grade.gradeNumber": grade.GradeNumber,
+    },
+    EmptySort,
+  )
+  if err != nil {
+    return Student {}, err
+  }
+
+  // transforming subjects to short subjects
+  var shortSubjects []ShortSubject
+  for _, subject := range subjects {
+    shortSubjects = append(
+      shortSubjects,
+      ShortSubject {
+        ID: subject.ID,
+        Name: subject.Name,
+      },
+    )
+  }
+
+  var student Student
+  err = Students.FindOneAndUpdate(
+    ctx,
+    bson.M{"id": id},
+    bson.M{
+      "$set": bson.M{
+        "grade": grade,
+        "subjects": shortSubjects,
+      },
+    },
+  ).Decode(&student)
+  student.Grade = grade
+  student.Subjects = shortSubjects
+
+  return student, err  
 }
 
 func (student *Student) Insert() (error) {
