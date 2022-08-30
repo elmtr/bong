@@ -40,6 +40,7 @@ var LastNameSort interface{} = bson.D{
 var Schools *mongo.Collection
 var Grades *mongo.Collection
 var Subjects *mongo.Collection
+var Periods *mongo.Collection
 
 // main collections
 var Marks *mongo.Collection
@@ -75,6 +76,7 @@ func InitDB(MongoURI string) {
   Schools = GetCollection("schools", Client)
   Grades = GetCollection("grades", Client)
   Subjects = GetCollection("subjects", Client)
+  Periods = GetCollection("periods", Client)
   Marks = GetCollection("marks", Client)
   Truancies = GetCollection("truancies", Client)
   DraftMarks = GetCollection("draftmarks", Client)
