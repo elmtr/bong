@@ -8,11 +8,11 @@ import (
 type Period struct {
   ID        string `json:"id" bson:"id"`
 
-  // modifiable
   Day       int    `json:"day" bson:"day"`
   Interval  int    `json:"interval" bson:"interval"`
+
+  // modifiable
   Room      string `json:"room" bson:"room"`
-  
   // indexable
   Subject Subject   `json:"subject" bson:"subject"`
 }

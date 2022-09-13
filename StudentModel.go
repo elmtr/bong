@@ -65,7 +65,7 @@ func GetStudents(filter interface{}) ([]Student, error) {
   var students []Student
 
   options := options.Find()
-  options.SetSort(EmptySort)
+  options.SetSort(LastNameSort)
 
   cursor, err := Students.Find(ctx, filter, options)
   if err != nil {

@@ -34,6 +34,7 @@ var GradeSort interface{} = bson.D{
 }
 var LastNameSort interface{} = bson.D{
   {Key: "lastName", Value: 1},
+  {Key: "firstName", Value: 1},
 }
 
 // administrative collections
